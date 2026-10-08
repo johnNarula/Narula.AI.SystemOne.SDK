@@ -1,8 +1,9 @@
+using Narula.AI.SystemOne.SDK.Clef.Configuration;
 using System.Globalization;
 using Microsoft.Data.Sqlite;
 using Narula.AI.SystemOne.SDK.Clef.Models;
 
-namespace Narula.AI.SystemOne.SDK.Clef.Configuration;
+namespace Narula.AI.SystemOne.SDK.Clef.Test.Config;
 
 public sealed record SettingRow(string Key, string Value, string Description, bool IsSecret);
 
@@ -17,7 +18,7 @@ public sealed class SettingsStore
     // Seed values. They exist only to populate a brand-new database; runtime reads the DB.
     private static readonly SettingRow[] Defaults =
     [
-        new(SettingKeys.Provider, "cloudflare", "Active provider: cloudflare | systemone", false),
+        new(SettingKeys.Provider, "cloudflare", "Active provider: cloudflare | systemone | openrouter", false),
         new(SettingKeys.CfAccountId, "", "Cloudflare account id", false),
         new(SettingKeys.CfApiToken, "", "Cloudflare API token (stored in plaintext; file is chmod 600 on Unix)", true),
         new(SettingKeys.CfBaseUrl, "https://api.cloudflare.com/client/v4", "Cloudflare API base URL", false),
@@ -25,6 +26,9 @@ public sealed class SettingsStore
         new(SettingKeys.SoBaseUrl, "http://localhost:11434", "SystemOne-compatible server base URL", false),
         new(SettingKeys.SoPath, "/v1/systemone", "SystemOne endpoint path", false),
         new(SettingKeys.SoApiKey, "", "Optional bearer key for the SystemOne server", true),
+        new(SettingKeys.OrApiKey, "", "OpenRouter API key (stored in plaintext; blank before commit)", true),
+        new(SettingKeys.OrBaseUrl, "https://openrouter.ai/api/alpha/decisions", "OpenRouter Decisions API URL", false),
+        new(SettingKeys.OrModel, "cloudflare/clef-flash", "cloudflare/clef-flash | cloudflare/clef", false),
         new(SettingKeys.SoModel, "clef", "Model name sent to the SystemOne server", false),
         new(SettingKeys.HttpTimeout, "60", "HTTP timeout in seconds", false),
         new(SettingKeys.RetryMax, "3", "Total attempts per call (1 = no retry)", false),
@@ -113,10 +117,11 @@ public sealed class SettingsStore
         return new ClefSettings
         {
             Provider = Enum.Parse<ProviderKind>(S(SettingKeys.Provider), ignoreCase: true),
+            OpenRouter = new OpenRouterSettings { ApiKey = S(SettingKeys.OrApiKey), BaseUrl = S(SettingKeys.OrBaseUrl), Model = S(SettingKeys.OrModel) },
             Cloudflare = new CloudflareSettings
             {
                 AccountId = S(SettingKeys.CfAccountId), ApiToken = S(SettingKeys.CfApiToken),
-                BaseUrl = S(SettingKeys.CfBaseUrl), Model = EnumWire.ParseModel(S(SettingKeys.CfModel))
+                BaseUrl = S(SettingKeys.CfBaseUrl), Model = S(SettingKeys.CfModel)
             },
             SystemOne = new SystemOneSettings
             {

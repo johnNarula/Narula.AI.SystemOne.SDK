@@ -10,19 +10,30 @@ namespace Narula.AI.SystemOne.SDK.Clef.Providers;
 public abstract class HttpDecisionClientBase : ISystemOneClient
 {
     private readonly HttpClient _http;
+    /// <summary>Validated settings for the active provider.</summary>
     protected readonly ClefSettings Settings;
 
+    /// <summary>Builds a provider client.</summary>
+    /// <param name="http">Caller-owned HttpClient.</param>
+    /// <param name="settings">Validated settings.</param>
     protected HttpDecisionClientBase(HttpClient http, ClefSettings settings) { _http = http; Settings = settings; }
 
+    /// <inheritdoc/>
     public abstract ProviderCapabilities Capabilities { get; }
+    /// <summary>Builds the request URI for one call.</summary>
     protected abstract Uri BuildUri(DecisionRequest request);
+    /// <summary>Resolves the model name (per-call override wins, else configured).</summary>
     protected abstract string ModelName(DecisionRequest request);
+    /// <summary>Applies auth headers to the request.</summary>
     protected abstract void Authorize(HttpRequestMessage message);
+    /// <summary>True when this provider takes images inside the state array.</summary>
+    protected virtual bool ImagesInState => false;
 
+    /// <inheritdoc/>
     public async Task<DecisionResult> DecideAsync(DecisionRequest request, CancellationToken ct = default)
     {
         RequestValidator.Validate(request, Settings.Limits, Capabilities);
-        var json = ClefWire.BuildBody(request, ModelName(request));
+        var json = ClefWire.BuildBody(request, ModelName(request), ImagesInState);
         var uri = BuildUri(request);
         var max = Math.Max(1, Settings.Retry.MaxAttempts);
 

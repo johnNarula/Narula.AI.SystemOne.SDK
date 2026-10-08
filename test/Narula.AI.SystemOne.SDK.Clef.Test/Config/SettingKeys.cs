@@ -1,4 +1,4 @@
-namespace Narula.AI.SystemOne.SDK.Clef.Configuration;
+namespace Narula.AI.SystemOne.SDK.Clef.Test.Config;
 
 /// <summary>Every key stored in the settings table, in one place.</summary>
 public static class SettingKeys
@@ -12,6 +12,9 @@ public static class SettingKeys
     public const string SoPath = "systemone.path";
     public const string SoApiKey = "systemone.api_key";
     public const string SoModel = "systemone.model";
+    public const string OrApiKey = "openrouter.api_key";
+    public const string OrBaseUrl = "openrouter.base_url";
+    public const string OrModel = "openrouter.model";
     public const string HttpTimeout = "http.timeout_seconds";
     public const string RetryMax = "retry.max_attempts";
     public const string RetryDelay = "retry.base_delay_ms";

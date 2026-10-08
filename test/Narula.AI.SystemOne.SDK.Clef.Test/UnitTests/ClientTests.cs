@@ -1,3 +1,4 @@
+using Narula.AI.SystemOne.SDK.Clef.Test.Config;
 using System.Net;
 using Narula.AI.SystemOne.SDK.Clef.Configuration;
 using Narula.AI.SystemOne.SDK.Clef.Extensions;
@@ -18,7 +19,7 @@ public class ClientTests
         new SettingsStore(Path.Combine(Path.GetTempPath(), $"clef-{Guid.NewGuid():N}.cfg")).Load() with
         {
             Cloudflare = new CloudflareSettings
-            { AccountId = "acc", ApiToken = "tok", BaseUrl = "https://example.test/client/v4", Model = ClefModel.ClefFlash },
+            { AccountId = "acc", ApiToken = "tok", BaseUrl = "https://example.test/client/v4", Model = "clef-flash" },
             Retry = new RetrySettings { MaxAttempts = attempts, BaseDelayMs = 1 }
         };
 
@@ -42,7 +43,7 @@ public class ClientTests
     {
         var h = new FakeHandler(n => n < 3 ? FakeHandler.Json("{}", HttpStatusCode.ServiceUnavailable) : FakeHandler.Json(MatchJson));
         var client = new CloudflareClefClient(new HttpClient(h), Settings(3));
-        await client.BestMatchAsync("q", new[] { "a", "b" });
+        await client.BestMatchAsync("q", new[] { "a", "b", "c", "d" });
         Assert.Equal(3, h.Calls);
     }
 
@@ -68,8 +69,8 @@ public class ClientTests
     public void Factory_PicksProviderFromSettings()
     {
         var s = Settings();
-        Assert.IsType<CloudflareClefClient>(ClientFactory.Create(s));
+        Assert.IsType<CloudflareClefClient>(ClientFactory.Create(s, new HttpClient()));
         var so = s with { Provider = ProviderKind.SystemOne };
-        Assert.IsType<SystemOneHttpClient>(ClientFactory.Create(so));
+        Assert.IsType<SystemOneHttpClient>(ClientFactory.Create(so, new HttpClient()));
     }
 }

@@ -10,15 +10,32 @@ namespace Narula.AI.SystemOne.SDK.Clef.Providers;
 /// </summary>
 public static class ClefWire
 {
-    public static string BuildBody(DecisionRequest req, string modelName)
+    /// <summary>Serializes a decision request to the provider JSON body.</summary>
+    /// <param name="req">The request.</param>
+    /// <param name="modelName">Model name for the "model" field.</param>
+    /// <param name="imagesInState">True when images travel inside the state array (OpenRouter).</param>
+    public static string BuildBody(DecisionRequest req, string modelName, bool imagesInState = false)
     {
         var questions = new JsonObject();
         foreach (var (id, q) in req.Questions) questions[id] = BuildQuestion(q);
 
         var body = new JsonObject { ["model"] = modelName };
-        if (req.State is not null) body["state"] = JsonSerializer.SerializeToNode(req.State);
-        if (req.Images.Count > 0)
-            body["images"] = new JsonArray(req.Images.Select(i => (JsonNode?)JsonValue.Create(i.ToDataUri())).ToArray());
+        if (imagesInState && req.Images.Count > 0)
+        {
+            // OpenRouter: images are parts of the top-level state array.
+            var parts = new JsonArray();
+            if (req.State is not null)
+                parts.Add(req.State is string text ? JsonValue.Create(text) : JsonValue.Create(JsonSerializer.Serialize(req.State)));
+            foreach (var img in req.Images)
+                parts.Add(new JsonObject { ["type"] = "image_url", ["image_url"] = new JsonObject { ["url"] = img.ToDataUri() } });
+            body["state"] = parts;
+        }
+        else
+        {
+            if (req.State is not null) body["state"] = JsonSerializer.SerializeToNode(req.State);
+            if (req.Images.Count > 0)
+                body["images"] = new JsonArray(req.Images.Select(i => (JsonNode?)JsonValue.Create(i.ToDataUri())).ToArray());
+        }
         if (req.Videos.Count > 0)   // ASSUMPTION: {"frames":[...], "fps":n}
             body["videos"] = new JsonArray(req.Videos.Select(v => (JsonNode?)BuildVideo(v)).ToArray());
         body["questions"] = questions;
@@ -53,6 +70,10 @@ public static class ClefWire
     }
 
     /// <summary>Lenient parser: accepts the Cloudflare envelope ({result:{...}}) or a bare SystemOne body.</summary>
+    /// <summary>Parses a provider response (Cloudflare envelope or bare SystemOne body).</summary>
+    /// <param name="body">Raw response JSON.</param>
+    /// <exception cref="ClefException">Not JSON, or no answers present.</exception>
+    /// <exception cref="ClefApiException">Provider reported failure.</exception>
     public static DecisionResult Parse(string body)
     {
         JsonObject root;
@@ -106,7 +127,7 @@ public static class ClefWire
 
         // Noul: ASSUMPTION - probability of "true" under one of several plausible field names.
         var po2 = probs as JsonObject;
-        var p = Num(a["probability"]) ?? Num(a["true"]) ?? Num(a["yes"]) ?? Num(po2?["true"]) ?? Num(po2?["yes"]);
+        var p = Num(a["noul"]) ?? Num(a["probability"]) ?? Num(a["true"]) ?? Num(a["yes"]) ?? Num(po2?["true"]) ?? Num(po2?["yes"]);
         return p is { } pv
             ? new NoulAnswer(pv, conf)
             : throw new ClefException($"Unrecognised answer shape for '{id}': {a.ToJsonString()}");

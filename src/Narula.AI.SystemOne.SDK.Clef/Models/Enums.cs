@@ -1,17 +1,31 @@
 namespace Narula.AI.SystemOne.SDK.Clef.Models;
 
 /// <summary>The three typed question kinds a decision model answers.</summary>
-public enum QuestionType { Noul, Choice, Score }
-
-/// <summary>The hosted Clef model variants.</summary>
-public enum ClefModel { Clef, ClefFlash }
+public enum QuestionType
+{
+    /// <summary>Yes/no question.</summary>
+    Noul,
+    /// <summary>Pick one option from a set.</summary>
+    Choice,
+    /// <summary>Rate against an ordered rubric.</summary>
+    Score
+}
 
 /// <summary>Image formats accepted as inputs.</summary>
-public enum ImageFormat { Png, Jpeg, WebP }
+public enum ImageFormat
+{
+    /// <summary>PNG image.</summary>
+    Png,
+    /// <summary>JPEG image.</summary>
+    Jpeg,
+    /// <summary>WebP image.</summary>
+    WebP
+}
 
 /// <summary>Maps enums to their wire (JSON / HTTP) representation and back.</summary>
 public static class EnumWire
 {
+    /// <summary>Question type to wire string ("noul", "choice", "score").</summary>
     public static string ToWire(this QuestionType t) => t switch
     {
         QuestionType.Noul => "noul",
@@ -20,20 +34,7 @@ public static class EnumWire
         _ => throw new ArgumentOutOfRangeException(nameof(t))
     };
 
-    public static string ToWire(this ClefModel m) => m switch
-    {
-        ClefModel.Clef => "clef",
-        ClefModel.ClefFlash => "clef-flash",
-        _ => throw new ArgumentOutOfRangeException(nameof(m))
-    };
-
-    public static ClefModel ParseModel(string s) => s.Trim().ToLowerInvariant() switch
-    {
-        "clef" => ClefModel.Clef,
-        "clef-flash" or "clefflash" => ClefModel.ClefFlash,
-        _ => throw new ArgumentException($"Unknown Clef model '{s}'. Use 'clef' or 'clef-flash'.")
-    };
-
+    /// <summary>Image format to MIME type.</summary>
     public static string MediaType(this ImageFormat f) => f switch
     {
         ImageFormat.Png => "image/png",

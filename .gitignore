@@ -1,6 +1,6 @@
 bin/
 obj/
-*.sqlite.config
 .vs/
 .idea/
 .DS_Store
+*.sqlite.config

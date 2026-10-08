@@ -11,9 +11,7 @@ public class WireTests
     public void EnumWire_RoundTrips()
     {
         Assert.Equal("noul", QuestionType.Noul.ToWire());
-        Assert.Equal("clef-flash", ClefModel.ClefFlash.ToWire());
-        Assert.Equal(ClefModel.Clef, EnumWire.ParseModel("CLEF"));
-        Assert.Throws<ArgumentException>(() => EnumWire.ParseModel("nope"));
+        Assert.Equal("image/png", ImageFormat.Png.MediaType());
     }
 
     [Fact]

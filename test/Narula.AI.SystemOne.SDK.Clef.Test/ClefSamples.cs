@@ -1,3 +1,4 @@
+using Narula.AI.SystemOne.SDK.Clef.Test.Config;
 using Narula.AI.SystemOne.SDK.Clef.Configuration;
 using Narula.AI.SystemOne.SDK.Clef.Extensions;
 using Narula.AI.SystemOne.SDK.Clef.Models;
@@ -73,7 +74,7 @@ public static class ClefSamples
         var settings = store.Load();
         if (!live)
         {
-            var model = (req.Model ?? settings.Cloudflare.Model).ToWire();
+            var model = (req.Model ?? settings.Cloudflare.Model);
             Console.WriteLine($"DRY RUN (add --live to call {settings.Provider}). Request body:");
             Console.WriteLine(Preview(ClefWire.BuildBody(req, model)));
             return 0;
@@ -81,7 +82,7 @@ public static class ClefSamples
 
         try
         {
-            var client = ClientFactory.Create(settings);
+            var client = ClientFactory.Create(settings, new HttpClient { Timeout = TimeSpan.FromSeconds(settings.Http.TimeoutSeconds) });
             if (kind == "text")
             {
                 // The friendly one-liner: best match plus full ranking.

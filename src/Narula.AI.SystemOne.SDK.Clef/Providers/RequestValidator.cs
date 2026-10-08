@@ -11,6 +11,8 @@ public static partial class RequestValidator
     [GeneratedRegex(@"^[A-Za-z0-9_.\-]{1,100}$")]
     private static partial Regex IdPattern();
 
+    /// <summary>Validates a request against limits and provider capabilities before any network call.</summary>
+    /// <exception cref="ClefValidationException">A limit or capability is violated.</exception>
     public static void Validate(DecisionRequest req, LimitSettings limits, ProviderCapabilities caps)
     {
         if (req.Questions.Count == 0) throw new ClefValidationException("At least one question is required.");

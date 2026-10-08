@@ -1,3 +1,4 @@
+using Narula.AI.SystemOne.SDK.Clef.Test.Config;
 using Narula.AI.SystemOne.SDK.Clef.Configuration;
 using Narula.AI.SystemOne.SDK.Clef.Models;
 using Xunit;
@@ -13,7 +14,7 @@ public class SettingsStoreTests
     {
         var s = new SettingsStore(TempPath()).Load();
         Assert.Equal(ProviderKind.Cloudflare, s.Provider);
-        Assert.Equal(ClefModel.ClefFlash, s.Cloudflare.Model);
+        Assert.Equal("clef-flash", s.Cloudflare.Model);
         Assert.Equal(64, s.Limits.MaxQuestions);
         Assert.Equal(4, s.Limits.MaxImages);
     }
@@ -34,6 +35,6 @@ public class SettingsStoreTests
     public void EmptyToken_FailsValidationWithClearMessage()
     {
         var ex = Assert.Throws<ClefConfigurationException>(() => new SettingsStore(TempPath()).Load().Validate());
-        Assert.Contains("account_id", ex.Message);
+        Assert.Contains("AccountId", ex.Message);
     }
 }
