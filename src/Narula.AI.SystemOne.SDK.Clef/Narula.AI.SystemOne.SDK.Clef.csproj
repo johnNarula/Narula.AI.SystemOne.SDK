@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Narula.AI.SystemOne.SDK.Clef</RootNamespace>
+    <AssemblyName>Narula.AI.SystemOne.SDK.Clef</AssemblyName>
+    <Description>Provider-neutral SDK for decision models (Cloudflare Clef, SystemOne/Jev-compatible endpoints).</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.*" />
+  </ItemGroup>
+</Project>

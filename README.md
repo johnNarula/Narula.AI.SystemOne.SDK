@@ -1,16 +1,16 @@
-# Narula.AI.SystemOne
+# Narula.AI.SystemOne.SDK
 
 Provider-neutral SDK for decision models. Today: Cloudflare Clef. Also a generic SystemOne-compatible HTTP provider (local Clef, Jev, ...).
 
-- `src/Narula.AI.SystemOne.Clef` - the library
-- `test/Narula.AI.SystemOne.Clef.Test` - builds `Clef.exe` (sample runner) and holds all unit tests
+- `src/Narula.AI.SystemOne.SDK.Clef` - the library
+- `test/Narula.AI.SystemOne.SDK.Clef.Test` - builds `Clef.exe` (sample runner) and holds all unit tests
 
 ## Settings
 All settings live in `Clef.sqlite.config` (SQLite) beside the executable; created with defaults on first run.
 
-    dotnet run --project test/Narula.AI.SystemOne.Clef.Test -- init
-    dotnet run --project test/Narula.AI.SystemOne.Clef.Test -- config set cloudflare.account_id <ID>
-    dotnet run --project test/Narula.AI.SystemOne.Clef.Test -- config set cloudflare.api_token <TOKEN>
+    dotnet run --project test/Narula.AI.SystemOne.SDK.Clef.Test -- init
+    dotnet run --project test/Narula.AI.SystemOne.SDK.Clef.Test -- config set cloudflare.account_id <ID>
+    dotnet run --project test/Narula.AI.SystemOne.SDK.Clef.Test -- config set cloudflare.api_token <TOKEN>
 
 The token is stored in plaintext (file is chmod 600 on Unix). The file is git-ignored.
 
