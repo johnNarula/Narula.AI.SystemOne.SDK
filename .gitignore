@@ -3,3 +3,4 @@ obj/
 *.sqlite.config
 .vs/
 .idea/
+.DS_Store
