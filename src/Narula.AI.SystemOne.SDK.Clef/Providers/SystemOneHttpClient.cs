@@ -13,7 +13,7 @@ public sealed class SystemOneHttpClient(HttpClient http, ClefSettings settings) 
         ProviderCapabilities.Text | ProviderCapabilities.Images | ProviderCapabilities.Videos;
 
     /// <inheritdoc/>
-    protected override string ModelName(DecisionRequest r) => r.Model ?? Settings.SystemOne.Model;
+    protected override string ModelName(DecisionRequest r) => string.IsNullOrWhiteSpace(r.Model) ? Settings.SystemOne.Model : r.Model;
 
     /// <inheritdoc/>
     protected override Uri BuildUri(DecisionRequest r) =>

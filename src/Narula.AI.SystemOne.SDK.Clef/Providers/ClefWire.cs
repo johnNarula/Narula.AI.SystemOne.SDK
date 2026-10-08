@@ -69,7 +69,6 @@ public static class ClefWire
         return o;
     }
 
-    /// <summary>Lenient parser: accepts the Cloudflare envelope ({result:{...}}) or a bare SystemOne body.</summary>
     /// <summary>Parses a provider response (Cloudflare envelope or bare SystemOne body).</summary>
     /// <param name="body">Raw response JSON.</param>
     /// <exception cref="ClefException">Not JSON, or no answers present.</exception>

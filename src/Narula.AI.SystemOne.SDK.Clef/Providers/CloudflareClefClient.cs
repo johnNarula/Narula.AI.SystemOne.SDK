@@ -12,7 +12,7 @@ public sealed class CloudflareClefClient(HttpClient http, ClefSettings settings)
     public override ProviderCapabilities Capabilities => ProviderCapabilities.Text | ProviderCapabilities.Images;
 
     /// <inheritdoc/>
-    protected override string ModelName(DecisionRequest r) => r.Model ?? Settings.Cloudflare.Model;
+    protected override string ModelName(DecisionRequest r) => string.IsNullOrWhiteSpace(r.Model) ? Settings.Cloudflare.Model : r.Model;
 
     // POST {base}/accounts/{id}/ai/run/@cf/cloudflare/{model}
     /// <inheritdoc/>

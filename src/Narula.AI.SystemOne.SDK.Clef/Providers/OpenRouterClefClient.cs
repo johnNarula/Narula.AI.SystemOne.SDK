@@ -15,7 +15,7 @@ public sealed class OpenRouterClefClient(HttpClient http, ClefSettings settings)
 
     /// <inheritdoc/>
     protected override string ModelName(DecisionRequest r) =>
-        r.Model ?? Settings.OpenRouter.Model;
+        string.IsNullOrWhiteSpace(r.Model) ? Settings.OpenRouter.Model : r.Model;
 
     /// <inheritdoc/>
     protected override Uri BuildUri(DecisionRequest r) => new(Settings.OpenRouter.BaseUrl);

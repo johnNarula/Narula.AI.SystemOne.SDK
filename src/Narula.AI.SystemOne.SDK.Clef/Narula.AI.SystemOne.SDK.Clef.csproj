@@ -10,11 +10,13 @@
     <NoWarn>$(NoWarn)</NoWarn>
     <PackageId>Narula.AI.SystemOne.SDK.Clef</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.1.0-alpha.1</Version>
+    <Version>1.0.0</Version>
     <Authors>Narula</Authors>
     <Description>Provider-neutral .NET SDK for decision models (Cloudflare Clef via OpenRouter or Workers AI, SystemOne/Jev-compatible endpoints). No config files; all settings are passed in.</Description>
     <PackageTags>ai;decision;clef;openrouter;cloudflare;systemone</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/johnNarula/Narula.AI.SystemOne.SDK</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.*" />

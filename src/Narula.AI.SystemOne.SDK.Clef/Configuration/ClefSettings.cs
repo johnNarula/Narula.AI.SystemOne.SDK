@@ -41,6 +41,10 @@ public sealed record ClefSettings
                 throw new ClefConfigurationException($"Cloudflare.AccountId is required.");
             if (string.IsNullOrWhiteSpace(Cloudflare.ApiToken))
                 throw new ClefConfigurationException($"Cloudflare.ApiToken is required.");
+            if (string.IsNullOrWhiteSpace(Cloudflare.BaseUrl))
+                throw new ClefConfigurationException($"Cloudflare.BaseUrl is required.");
+            if (string.IsNullOrWhiteSpace(Cloudflare.Model))
+                throw new ClefConfigurationException($"Cloudflare.Model is required.");
         }
         else if (Provider == ProviderKind.OpenRouter)
         {
@@ -48,6 +52,8 @@ public sealed record ClefSettings
                 throw new ClefConfigurationException($"OpenRouter.ApiKey is required.");
             if (string.IsNullOrWhiteSpace(OpenRouter.BaseUrl))
                 throw new ClefConfigurationException($"OpenRouter.BaseUrl is required.");
+            if (string.IsNullOrWhiteSpace(OpenRouter.Model))
+                throw new ClefConfigurationException($"OpenRouter.Model is required.");
         }
         else if (string.IsNullOrWhiteSpace(SystemOne.BaseUrl))
             throw new ClefConfigurationException($"SystemOne.BaseUrl is required.");
@@ -61,8 +67,8 @@ public sealed record CloudflareSettings
     public string AccountId { get; init; } = "";
     /// <summary>API token with Workers AI permission. Sent as a Bearer token.</summary>
     public string ApiToken { get; init; } = "";
-    /// <summary>Cloudflare API base URL (defaults to https://api.cloudflare.com/client/v4).</summary>
-    public string BaseUrl { get; init; } = "";
+    /// <summary>Cloudflare API base URL.</summary>
+    public string BaseUrl { get; init; } = "https://api.cloudflare.com/client/v4";
     /// <summary>Model name appended to <c>@cf/cloudflare/</c> (e.g. "clef-flash", "clef").</summary>
     public string Model { get; init; } = "clef-flash";
 }
@@ -77,7 +83,7 @@ public sealed record SystemOneSettings
     /// <summary>Optional Bearer token for the server.</summary>
     public string ApiKey { get; init; } = "";
     /// <summary>Model name sent to the server.</summary>
-    public string Model { get; init; } = "";
+    public string Model { get; init; } = "clef";
 }
 
 /// <summary>HTTP behavior settings.</summary>
@@ -112,8 +118,8 @@ public sealed record OpenRouterSettings
 {
     /// <summary>OpenRouter API key. Sent as a Bearer token.</summary>
     public string ApiKey { get; init; } = "";
-    /// <summary>Decisions endpoint URL (https://openrouter.ai/api/alpha/decisions).</summary>
-    public string BaseUrl { get; init; } = "";
+    /// <summary>Decisions endpoint URL.</summary>
+    public string BaseUrl { get; init; } = "https://openrouter.ai/api/alpha/decisions";
     /// <summary>Full model name (e.g. "cloudflare/clef-flash", "cloudflare/clef").</summary>
-    public string Model { get; init; } = "";
+    public string Model { get; init; } = "cloudflare/clef-flash";
 }
