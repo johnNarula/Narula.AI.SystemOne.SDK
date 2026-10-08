@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Narula.AI.SystemOne.Clef/Narula.AI.SystemOne.Clef.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Narula.AI.SystemOne.Clef.Test/Narula.AI.SystemOne.Clef.Test.csproj" />
+  </Folder>
+</Solution>

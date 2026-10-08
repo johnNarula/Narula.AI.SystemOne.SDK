@@ -1,0 +1,5 @@
+bin/
+obj/
+*.sqlite.config
+.vs/
+.idea/
