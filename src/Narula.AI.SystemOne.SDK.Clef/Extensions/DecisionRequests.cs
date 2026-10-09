@@ -26,7 +26,7 @@ public static class DecisionRequests
     {
         if (candidates.Count < 2) throw new ArgumentException("Need at least 2 candidates.", nameof(candidates));
         var options = candidates.Select((c, i) => new ChoiceOption(OptionId(i), describe(c))).ToList();
-        return new DecisionRequest { State = new { query }, Model = model }
+        return new DecisionRequest { State = new QueryState(query), Model = model }
             .Add("match", new ChoiceQuestion(instructions ?? DefaultMatchInstructions, options));
     }
 }

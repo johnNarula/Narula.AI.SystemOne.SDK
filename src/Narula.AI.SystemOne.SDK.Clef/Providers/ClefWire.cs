@@ -25,14 +25,14 @@ public static class ClefWire
             // OpenRouter: images are parts of the top-level state array.
             var parts = new JsonArray();
             if (req.State is not null)
-                parts.Add(req.State is string text ? JsonValue.Create(text) : JsonValue.Create(JsonSerializer.Serialize(req.State)));
+                parts.Add(req.State.ToJsonNode());
             foreach (var img in req.Images)
                 parts.Add(new JsonObject { ["type"] = "image_url", ["image_url"] = new JsonObject { ["url"] = img.ToDataUri() } });
             body["state"] = parts;
         }
         else
         {
-            if (req.State is not null) body["state"] = JsonSerializer.SerializeToNode(req.State);
+            if (req.State is not null) body["state"] = req.State.ToJsonNode();
             if (req.Images.Count > 0)
                 body["images"] = new JsonArray(req.Images.Select(i => (JsonNode?)JsonValue.Create(i.ToDataUri())).ToArray());
         }

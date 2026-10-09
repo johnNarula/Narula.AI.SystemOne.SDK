@@ -56,7 +56,7 @@ public static class DecisionClientExtensions
         => client.BestMatchAsync(query, descriptions, d => d, instructions, model, ct);
 
     /// <summary>Yes/no question about a state (optionally with images).</summary>
-    public static async Task<NoulAnswer> AskAsync(this ISystemOneClient client, object state, string question,
+    public static async Task<NoulAnswer> AskAsync(this ISystemOneClient client, DecisionState state, string question,
         IEnumerable<ImageInput>? images = null, string? model = null, CancellationToken ct = default)
     {
         var req = new DecisionRequest { State = state, Model = model }.Add("q", new NoulQuestion(question));
@@ -65,7 +65,7 @@ public static class DecisionClientExtensions
     }
 
     /// <summary>Rate a state against an ordered rubric (lowest level first).</summary>
-    public static async Task<ScoreAnswer> ScoreAsync(this ISystemOneClient client, object state, string instructions,
+    public static async Task<ScoreAnswer> ScoreAsync(this ISystemOneClient client, DecisionState state, string instructions,
         IReadOnlyList<string> levels, string? model = null, CancellationToken ct = default)
     {
         var req = new DecisionRequest { State = state, Model = model }.Add("s", new ScoreQuestion(instructions, levels));

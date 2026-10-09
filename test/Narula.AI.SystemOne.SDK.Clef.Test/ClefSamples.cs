@@ -27,16 +27,16 @@ public static class ClefSamples
         DecisionRequests.BestMatch(SampleQuery, Descriptions, d => d);
 
     public static DecisionRequest NoulRequest() =>
-        new DecisionRequest { State = "Checkout has failed for every customer for the last hour." }
+        new DecisionRequest { State = new TextState("Checkout has failed for every customer for the last hour.") }
             .Add("urgent", new NoulQuestion("Is this support request urgent?"));
 
     public static DecisionRequest ScoreRequest() =>
-        new DecisionRequest { State = "The app works but the export button is slow on large files." }
+        new DecisionRequest { State = new TextState("The app works but the export button is slow on large files.") }
             .Add("severity", new ScoreQuestion("How severe is this bug report?",
                 ["Cosmetic", "Minor annoyance", "Degraded feature", "Major outage"]));
 
     public static async Task<DecisionRequest> ImageRequestAsync(string path) =>
-        new DecisionRequest { State = "Inspect the attached image." }
+        new DecisionRequest { State = new TextState("Inspect the attached image.") }
             .WithImage(await ImageInput.FromFileAsync(path))
             .Add("has_text", new NoulQuestion("Does the image contain readable text?"))
             .Add("kind", new ChoiceQuestion("What is the image mostly of?",
@@ -51,7 +51,7 @@ public static class ClefSamples
     {
         var frames = new List<ImageInput>();
         foreach (var p in framePaths) frames.Add(await ImageInput.FromFileAsync(p));
-        return new DecisionRequest { State = "Frames from one short clip." }
+        return new DecisionRequest { State = new TextState("Frames from one short clip.") }
             .WithVideo(new VideoInput(frames))
             .Add("moving", new NoulQuestion("Is there visible motion across the frames?"));
     }

@@ -59,4 +59,31 @@ public class WireTests
     [Fact]
     public void Parse_ErrorPayload_Throws() =>
         Assert.Throws<ClefApiException>(() => ClefWire.Parse("""{"success":false,"errors":[{"message":"bad"}]}"""));
+
+
+    /// <summary>
+    /// AOT-safety: BuildBody must work for every DecisionState subtype without reflection.
+    /// Under Native AOT, the old reflection-based serialization threw InvalidOperationException.
+    /// </summary>
+    [Fact]
+    public void BuildBody_EachStateType_NoReflection()
+    {
+        // TextState renders as a JSON string
+        var textReq = new DecisionRequest { State = new TextState("hello") }
+            .Add("q", new NoulQuestion("ok?"));
+        var textBody = JsonNode.Parse(ClefWire.BuildBody(textReq, "m"))!;
+        Assert.Equal("hello", textBody["state"]!.GetValue<string>());
+
+        // QueryState renders as { "query": "..." }
+        var queryReq = new DecisionRequest { State = new QueryState("women") }
+            .Add("q", new NoulQuestion("ok?"));
+        var queryBody = JsonNode.Parse(ClefWire.BuildBody(queryReq, "m"))!;
+        Assert.Equal("women", queryBody["state"]!["query"]!.GetValue<string>());
+
+        // Null state omits the field entirely
+        var nullReq = new DecisionRequest { State = null }
+            .Add("q", new NoulQuestion("ok?"));
+        var nullBody = JsonNode.Parse(ClefWire.BuildBody(nullReq, "m"))!;
+        Assert.Null(nullBody["state"]);
+    }
 }

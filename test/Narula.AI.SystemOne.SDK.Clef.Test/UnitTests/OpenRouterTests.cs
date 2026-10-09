@@ -1,6 +1,7 @@
 using Narula.AI.SystemOne.SDK.Clef.Test.Config;
 using Narula.AI.SystemOne.SDK.Clef.Configuration;
 using Narula.AI.SystemOne.SDK.Clef.Extensions;
+using Narula.AI.SystemOne.SDK.Clef.Models;
 using Narula.AI.SystemOne.SDK.Clef.Providers;
 using Xunit;
 
@@ -25,7 +26,7 @@ public class OpenRouterTests
         };
         var h = new FakeHandler(_ => FakeHandler.Json(Json));
         var client = ClientFactory.Create(s, new HttpClient(h));
-        var a = await client.AskAsync("state", "ok?");
+        var a = await client.AskAsync(new TextState("state"), "ok?");
         Assert.Equal(0.2767, a.Probability, 4);
         Assert.Equal("Bearer k", h.LastRequest!.Headers.Authorization!.ToString());
         Assert.Equal("https://example.test/api/alpha/decisions", h.LastRequest.RequestUri!.ToString());

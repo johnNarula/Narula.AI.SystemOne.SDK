@@ -7,7 +7,7 @@ public sealed class DecisionRequest
     public string? Model { get; set; }
 
     /// <summary>Text, or any object that serializes to JSON.</summary>
-    public object? State { get; set; }
+    public DecisionState? State { get; set; }
 
     /// <summary>Images sent with the request (provider must support <c>ProviderCapabilities.Images</c>).</summary>
     public List<ImageInput> Images { get; } = new();

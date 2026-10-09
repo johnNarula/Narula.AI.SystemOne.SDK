@@ -61,8 +61,8 @@ public class ClientTests
     public async Task Extensions_WorkAgainstAnyProvider()
     {
         var fake = new FakeClient(ClefWire.Parse("""{"answers":{"q":{"probability":0.9},"s":{"score":1.5,"probabilities":[0.5,0.5]}}}"""));
-        Assert.Equal(0.9, (await fake.AskAsync("state", "ok?")).Probability);
-        Assert.Equal(1.5, (await fake.ScoreAsync("state", "rate", ["low", "high"])).Score);
+        Assert.Equal(0.9, (await fake.AskAsync(new TextState("state"), "ok?")).Probability);
+        Assert.Equal(1.5, (await fake.ScoreAsync(new TextState("state"), "rate", ["low", "high"])).Score);
     }
 
     [Fact]
